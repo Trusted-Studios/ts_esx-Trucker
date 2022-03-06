@@ -26,5 +26,4 @@ server_scripts {
 
 dependencies {
 	'es_extended',
-    'critScaleforms',
 }
