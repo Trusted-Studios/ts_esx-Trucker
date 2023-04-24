@@ -1,35 +1,31 @@
-ESX = nil
+---@diagnostic disable: param-type-mismatch, undefined-global, missing-parameter
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- ESX Shared 
+-- ════════════════════════════════════════════════════════════════════════════════════ --
 
-Citizen.CreateThread(function()
-    while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(0)
-    end
-    while ESX.GetPlayerData().job == nil do
-        Citizen.Wait(10)
-    end
-    PlayerData = ESX.GetPlayerData()
-end)
+ESX = exports["es_extended"]:getSharedObject()
 
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
+RegisterNetEvent('esx:playerLoaded', function(xPlayer)
     ESX.PlayerData = xPlayer
 end)
 
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
+RegisterNetEvent('esx:setJob', function(job)
     ESX.PlayerData.job = job
 end)
+
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- Debug Logs
+-- ════════════════════════════════════════════════════════════════════════════════════ --
 
 local filename = function()
     local str = debug.getinfo(2, "S").source:sub(2)
     return str:match("^.*/(.*).lua$") or str
 end
-print(filename()..".lua gestartet")
+print("^6[CLIENT - DEBUG] ^0: "..filename()..".lua gestartet");
 
---=====================================================================--
---                           RageUI Menu
---=====================================================================--
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- Code
+-- ════════════════════════════════════════════════════════════════════════════════════ --
 
 local rightPosition     = {x = 1450, y = 0}
 local leftPosition      = {x = 0, y = 0}
