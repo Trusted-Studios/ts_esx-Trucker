@@ -56,13 +56,12 @@ Config.Routen = {
 -- ════════════════════════════════════════════════════════════════════════════════════ --
 
 Config.Trailers = {
-    [1] = {spwn = "trailers"},
-    [2] = {spwn = "trailers2"},
-    [3] = {spwn = "trailers"},
+    {spwn = "trailers"},
+    {spwn = "trailers2"},
+    {spwn = "trailers"},
 }
 
 Config.Trucks = {
-    [1] = {spwn = "vnl780"},
-    [2] = {spwn = "W900"},
+    {spwn = "phantom"},
 }
 
