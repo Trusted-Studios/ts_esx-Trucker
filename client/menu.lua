@@ -189,7 +189,7 @@ Citizen.CreateThread(function()
         for k, v in pairs(Config.DepotPoint) do 
             local x, y, z = table.unpack(v.Coords)
             if Config.needJob then
-                if (ESX.PlayerData.job ~= nil and ESX.PlayerData.job.name == "trucker") then
+                if ESX?.PlayerData?.job?.name == "trucker" then
                     MenuInfos:OpenMenu(x, y, z, 8, 2)
                 else
                     MenuInfos:NoJob(x, y, z, "~r~Du musst Arbeitnehmer bei LS Logistik sein, um mit dem Auftraggeber interagieren zu können!")

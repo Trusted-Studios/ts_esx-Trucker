@@ -1,6 +1,8 @@
 fx_version 'cerulean'
 games { 'gta5' };
 
+lua54 'yes'
+
 client_scripts {
     "src/RMenu.lua",
     "src/menu/RageUI.lua",
@@ -11,7 +13,6 @@ client_scripts {
     "src/menu/items/*.lua",
     "src/menu/panels/*.lua",
     "src/menu/windows/*.lua",
-
 }
 
 client_scripts {
