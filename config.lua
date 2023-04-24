@@ -28,7 +28,7 @@ Config.EndPoint = vector3(1022.34, -2493.32, 28.5)
 
 Config.Cooldown = 10 -- in min 
 
-Config.TxdBug = false
+Config.TxdBug = true
 
 -- ════════════════════════════════════════════════════════════════════════════════════ --
 --                                Touren Coords                               
