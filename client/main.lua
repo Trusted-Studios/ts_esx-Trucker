@@ -31,18 +31,10 @@ local Info = {
     NPC = "s_m_y_ammucity_01",
 }
 
-local ped = nil
 local currentVehicle = nil
 local CurrentBlip = nil
 local IsTrailerAttached = false
 DriveToDepot = false
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        ped = GetPlayerPed(-1)
-    end
-end)
 
 function Info:SpawnPed()
     local hash = GetHashKey(self.NPC)
@@ -75,7 +67,8 @@ function Info:AddBlip()
     end
 end
 
-function Info:SpawnVehicle(x, y, z, h)
+function Info:SpawnVehicle(x, y, z, h) 
+    local ped <const> = GetPlayerPed(-1)
     SetEntityCoords(ped, x, y, z)
     SetEntityHeading(ped, h)
     local i = math.random(1, #Config.Trucks)
@@ -92,6 +85,7 @@ end
 
 function Info:IsTrailerAttached()
     Citizen.Wait(0)
+    local ped <const> = GetPlayerPed(-1)
     local veh = GetVehiclePedIsIn(ped)
     while not IsVehicleAttachedToTrailer(veh) do
         Citizen.Wait(0)
@@ -101,6 +95,7 @@ function Info:IsTrailerAttached()
 end
 
 function Info:Reward(reward)
+    local ped <const> = GetPlayerPed(-1)
     local veh = GetVehiclePedIsIn(ped)
     while true do
         Citizen.Wait(0)
@@ -117,6 +112,7 @@ function Info:Reward(reward)
 end
 
 function Info:GetDistance(x, y, z, distance)
+    local ped <const> = GetPlayerPed(-1)
     local coords = GetEntityCoords(ped)
     local dist = Vdist(coords, x, y, z)
     if dist <= distance then
@@ -182,6 +178,7 @@ function Info:DriveToCoords(x, y, z, event, newBlip, info)
 end
 
 function Info:FinishJob(info, reward, x, y, z)
+    local ped <const> = GetPlayerPed(-1)
     local veh = GetVehiclePedIsIn(ped)
     if GetEntityModel(veh) == GetHashKey(currentVehicle) then
         DoScreenFadeOut(1000)
@@ -203,7 +200,6 @@ function Info:FinishJob(info, reward, x, y, z)
         DoScreenFadeOut(1000)
         Citizen.Wait(1200)
         if (DoesEntityExist(ped) and not IsEntityDead(ped)) then
-            local pos = GetEntityCoords(ped)
             if (GetPedInVehicleSeat(veh, -1) == ped) then
                 SetEntityAsMissionEntity(veh, true, true)
                 deleteCar(veh)
