@@ -32,15 +32,16 @@ local Info = {
 }
 
 local currentVehicle = nil
-local CurrentBlip = nil
-local IsTrailerAttached = false
-DriveToDepot = false
+local currentBlip = nil
+local isTrailerAttached = false
+local driveToDeopt = false
+local driveToCoords = false
 
 function Info:SpawnPed()
     local hash = GetHashKey(self.NPC)
     while not HasModelLoaded(hash) do
         RequestModel(hash)
-        Citizen.Wait(20)
+        Wait(20)
 	end
     for k, v in pairs(Config.DepotPoint) do
         local x, y, z, h = table.unpack(v.Coords)
@@ -83,12 +84,12 @@ function Info:SpawnTrailer(x, y, z, h)
     Console_Log(Config.Trailers[i].spwn)
 end
 
-function Info:IsTrailerAttached()
-    Citizen.Wait(0)
+function Info:isTrailerAttached()
+    Wait(0)
     local ped <const> = GetPlayerPed(-1)
     local veh = GetVehiclePedIsIn(ped)
     while not IsVehicleAttachedToTrailer(veh) do
-        Citizen.Wait(0)
+        Wait(0)
         return false
     end
     return true
@@ -98,7 +99,7 @@ function Info:Reward(reward)
     local ped <const> = GetPlayerPed(-1)
     local veh = GetVehiclePedIsIn(ped)
     while true do
-        Citizen.Wait(0)
+        Wait(0)
         local vehHealth
         if Config.Health == "body" then
             vehHealth = GetVehicleBodyHealth(veh)
@@ -123,25 +124,25 @@ function Info:GetDistance(x, y, z, distance)
 end
 
 function Info:ShowProgressbar(time)
-    local int = 0
-    while int <= 120 do
-        Citizen.Wait(0)
+    local progress = 0
+    while progress <= 120 do
+        Wait(0)
         Visual.Subtitle("Warte bis die Ware abgeladen wurde.", 0)
         DisablePlayerControls()
         HideHudComponentThisFrame(7)
         HideHudComponentThisFrame(9)
         RenderRect(850, 1034.5, 190, 30, 0, 0, 0, 120)
         drawProgressBar(0.9305, 0.972, 0.0690, 0.0085, {0, 128, 255, 150}, 120)
-        drawProgressBar(0.9305, 0.972, 0.0690, 0.0085, {0, 128, 255, 255}, int)
-        Citizen.CreateThread(function()
-            Citizen.Wait(time)
-            int = int + (1.2 / time)
+        drawProgressBar(0.9305, 0.972, 0.0690, 0.0085, {0, 128, 255, 255}, progress)
+        CreateThread(function()
+            Wait(time)
+            progress = progress + (1.2 / time)
         end)
     end
 end
 
 function Info:DisplayBlip(newBlip, msg, sprite, colour, route)
-    CurrentBlip = newBlip
+    local currentBlip = newBlip
     SetBlipSprite(newBlip, sprite)
     SetBlipDisplay(newBlip, 6)
     SetBlipScale(newBlip, 1.0)
@@ -158,17 +159,19 @@ end
 
 function Info:DriveToCoords(x, y, z, event, newBlip, info)
     while JobStarted do
-        Citizen.Wait(0)
-        while DriveToCoords or DriveToDepot == true do
-            Citizen.Wait(0)
-            if IsTrailerAttached then
+        Wait(0)
+        while driveToCoords or driveToDeopt == true do
+            Wait(0)
+            if isTrailerAttached then
                 if Info:GetDistance(x, y, z, 20) then
                     addMarker(x, y, z)
                     if Info:GetDistance(x, y, z, 8) then
                         RemoveBlip(newBlip)
                         newBlip = nil
                         TriggerEvent("GMW_Scripts:"..event, info)
-                        IsTrailerAttached = true; DriveToCoords = false; DriveToDepot = false;
+                        isTrailerAttached = true
+                        driveToCoords = false
+                        driveToDeopt = false
                     end
                 end
             end
@@ -182,7 +185,7 @@ function Info:FinishJob(info, reward, x, y, z)
     local veh = GetVehiclePedIsIn(ped)
     if GetEntityModel(veh) == GetHashKey(currentVehicle) then
         DoScreenFadeOut(1000)
-        Citizen.Wait(1200)
+        Wait(1200)
         if (DoesEntityExist(ped) and not IsEntityDead(ped)) then
             local pos = GetEntityCoords(ped)
             if (GetPedInVehicleSeat(veh, -1) == ped) then
@@ -193,12 +196,12 @@ function Info:FinishJob(info, reward, x, y, z)
                 JobStarted = false
             end
         end
-        Citizen.Wait(1200)
+        Wait(1200)
         DoScreenFadeIn(1000)
-        Citizen.Wait(800)
+        Wait(800)
     else
         DoScreenFadeOut(1000)
-        Citizen.Wait(1200)
+        Wait(1200)
         if (DoesEntityExist(ped) and not IsEntityDead(ped)) then
             if (GetPedInVehicleSeat(veh, -1) == ped) then
                 SetEntityAsMissionEntity(veh, true, true)
@@ -208,48 +211,48 @@ function Info:FinishJob(info, reward, x, y, z)
             end
         end
         DoScreenFadeIn(1000)
-        Citizen.Wait(1200)
+        Wait(1200)
         notify("Du hast den Auftrag erfolglos abgeschlossen..")
         notify("~r~Demnächst solltest du auch mit dem Truck zurück kommen mit dem du losgefahren bist!")
         JobStarted = false
     end
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
     Info:SpawnPed()
     Info:AddBlip()
 end)
 
 AddEventHandler("GMW_Scripts:TJ_StartJob", function(info)
     DoScreenFadeOut(1000)
-    Citizen.Wait(3000)
-    Citizen.CreateThread(function()
+    Wait(3000)
+    CreateThread(function()
         local x, y, z, h = table.unpack(Config.VehSpawnPoint)
         Info:SpawnVehicle(x, y, z, h)
     end)
-    Citizen.CreateThread(function()
+    CreateThread(function()
         local x, y, z, h = table.unpack(Config.TrailerSpwnPoint)
         Info:SpawnTrailer(x, y, z, h)
     end)
-    TriggerEvent("GMW_Scripts:IsTrailerAttached", info)
-    Citizen.Wait(2000)
+    TriggerEvent("GMW_Scripts:isTrailerAttached", info)
+    Wait(2000)
     DoScreenFadeIn(1000)
     TriggerEvent("GMW_Scripts:ShowHUDComponents", info)
     TriggerEvent("GMW_Scripts:DrawRoute", info)
-    Citizen.Wait(800)
+    Wait(800)
 end)
 
-AddEventHandler("GMW_Scripts:IsTrailerAttached", function(info)
+AddEventHandler("GMW_Scripts:isTrailerAttached", function(info)
     while JobStarted do
-        Citizen.Wait(500)
-        if Info:IsTrailerAttached() then
-            IsTrailerAttached = true
+        Wait(500)
+        if Info:isTrailerAttached() then
+            isTrailerAttached = true
         else
-            IsTrailerAttached = false
-            Citizen.CreateThread(function()
+            isTrailerAttached = false
+            CreateThread(function()
                 while JobStarted do
-                    Citizen.Wait(0)
-                    if IsTrailerAttached == false then
+                    Wait(0)
+                    if isTrailerAttached == false then
                         Visual.Subtitle("~y~Hole den Trailer ab.", 0)
                     end
                 end
@@ -261,30 +264,30 @@ end)
 
 AddEventHandler("GMW_Scripts:ShowHUDComponents", function(info)
     while JobStarted do
-        Citizen.Wait(0)
-        if IsTrailerAttached then
-            Citizen.CreateThread(function()
-                while DriveToCoords do
-                    Citizen.Wait(0)
-                    if IsTrailerAttached then
+        Wait(0)
+        if isTrailerAttached then
+            CreateThread(function()
+                while driveToCoords do
+                    Wait(0)
+                    if isTrailerAttached then
                         Visual.Subtitle("Lohn: ~g~"..Info:Reward(info.Reward).."$ ~w~| Fahre zum Zielort: ~b~"..info.Label..".", 1000)
                     end
                 end
             end)
-            Citizen.CreateThread(function()
-                while DriveToDepot do
-                    Citizen.Wait(0)
+            CreateThread(function()
+                while driveToDeopt do
+                    Wait(0)
                     Visual.Subtitle("Lohn: ~g~"..Info:Reward(info.Reward).."$ ~w~| Fahre zurück zum Depot.", 1000)
                 end
             end)
         end
-        Citizen.Wait(500)
+        Wait(500)
     end
 end)
 
 AddEventHandler("GMW_Scripts:DrawRoute", function(info)
-    while not IsTrailerAttached do
-        Citizen.Wait(500)
+    while not isTrailerAttached do
+        Wait(500)
     end
     local x, y, z = table.unpack(info.Coords)
     local newBlip = AddBlipForCoord(x, y, z)
@@ -305,7 +308,7 @@ AddEventHandler("GMW_Scripts:DriveBack", function(info)
     local x, y, z = table.unpack(Config.EndPoint)
     local newBlip = AddBlipForCoord(x, y, z)
     Info:DisplayBlip(newBlip, "Zielort", 1, 5, true)
-    DriveToDepot = true
+    driveToDeopt = true
     Info:DriveToCoords(x, y, z, "EndJob", newBlip, info)
 end)
 
@@ -317,9 +320,9 @@ AddEventHandler("GMW_Scripts:EndJob", function(info)
 end)
 
 AddEventHandler("GMW_Scripts:AbortJob", function(info)
-    JobStarted = false; DriveToCoords = false; DriveToDepot = false
-    Console_Log("CurrentBlip: "..CurrentBlip)
-    RemoveBlip(CurrentBlip)
-    CurrentBlip = nil
+    JobStarted = false; driveToCoords = false; driveToDeopt = false
+    Console_Log("currentBlip: "..currentBlip)
+    RemoveBlip(currentBlip)
+    currentBlip = nil
     TriggerServerEvent("GMW_Scripts:PayFee", info)
 end)

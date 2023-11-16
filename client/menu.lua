@@ -56,9 +56,9 @@ RMenu.Add("GMW_Scripts:F6Menu", "F6Menu", RageUI.CreateMenu(MenuName, "~b~LS Log
 
 local ped = nil
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Wait(0)
         ped = GetPlayerPed(-1)
     end
 end)
@@ -126,7 +126,7 @@ function MenuInfos:F6menu()
                 onSelected = function()
                     RageUI.CloseAll()
                     DoScreenFadeOut(1000)
-                    Citizen.Wait(1200)
+                    Wait(1200)
                     local veh = GetVehiclePedIsIn(ped)
                     if (DoesEntityExist(ped) and not IsEntityDead(ped)) then 
                         local pos = GetEntityCoords(ped) 
@@ -138,9 +138,9 @@ function MenuInfos:F6menu()
                             TriggerEvent("GMW_Scripts:AbortJob", JobInfo)
                         end  
                     end
-                    Citizen.Wait(2000)
+                    Wait(2000)
                     DoScreenFadeIn(1000)
-                    Citizen.Wait(1200)
+                    Wait(1200)
                     MissionFailed("Auftrag fehlgeschlagen!", "Du hast den Auftrag abgebrochen.")
                 end
             })
@@ -149,12 +149,12 @@ function MenuInfos:F6menu()
 end 
 
 AddEventHandler("GMW_Scripts:TJ_StartCooldown", function()
-    Citizen.Wait(Config.Cooldown * 60000)
+    Wait(Config.Cooldown * 60000)
     table.remove(MenuTable, 1)
 end)
 
 function MenuInfos:OpenMenu(x, y, z, MarkerDist, MenuDist)
-    Citizen.CreateThread(function()    
+    CreateThread(function()    
         local ped = GetPlayerPed(-1)
         local coords = GetEntityCoords(ped)
         local dist = Vdist(coords, x, y, z)
@@ -168,7 +168,7 @@ function MenuInfos:OpenMenu(x, y, z, MarkerDist, MenuDist)
             end 
         end
     end)
-    Citizen.CreateThread(function()
+    CreateThread(function()
         if IsControlJustPressed(0, 167) and GetLastInputMethod(0) then
             RageUI.Visible(self.F6Menu, not RageUI.Visible(self.F6Menu))
         end 
@@ -183,9 +183,9 @@ function MenuInfos:NoJob(x, y, z, msg)
     end 
 end 
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do 
-        Citizen.Wait(0)
+        Wait(0)
         for k, v in pairs(Config.DepotPoint) do 
             local x, y, z = table.unpack(v.Coords)
             if Config.needJob then
@@ -198,12 +198,12 @@ Citizen.CreateThread(function()
                 MenuInfos:OpenMenu(x, y, z, 8, 2)
             end
         end   
-        Citizen.CreateThread(function()
-            Citizen.Wait(0)
+        CreateThread(function()
+            Wait(0)
             MenuInfos:RMenu()
         end)
-        Citizen.CreateThread(function()
-            Citizen.Wait(0)
+        CreateThread(function()
+            Wait(0)
             MenuInfos:F6menu()
         end)
     end 

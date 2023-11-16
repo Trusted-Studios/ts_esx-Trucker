@@ -32,7 +32,7 @@ function LoadAnimDict(dict)
 	if not HasAnimDictLoaded(dict) then
 		RequestAnimDict(dict)
 		while not HasAnimDictLoaded(dict) do
-			Citizen.Wait(1)
+			Wait(1)
 		end
 	end
 end
@@ -72,7 +72,7 @@ function spawnCar(car)
     RequestModel(car)
     while not HasModelLoaded(car) do
         RequestModel(car)
-        Citizen.Wait(50)
+        Wait(50)
     end
     local x, y, z = table.unpack(GetEntityCoords(PlayerPedId(), false))
     local vehicle = CreateVehicle(car, x, y, z, GetEntityHeading(PlayerPedId()), true, false)
@@ -87,7 +87,7 @@ function SpawnTrailer(car, x, y, z, h)
     RequestModel(car)
     while not HasModelLoaded(car) do
         RequestModel(car)
-        Citizen.Wait(50)
+        Wait(50)
     end
     local vehicle = CreateVehicle(car, x, y, z, h, true, false)
     SetEntityAsNoLongerNeeded(vehicle)
@@ -96,13 +96,13 @@ end
 
 -- Fahrzeug Löschen
 function deleteCar(entity)
-    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized(entity))
+    InvokeNative( 0xEA386986E786A54F, PointerValueIntInitialized(entity))
 end
 
 -- Blackscreen triggern
 function ScreenFade(WaitTime)
     DoScreenFadeOut(1000)
-    Citizen.Wait(WaitTime)
+    Wait(WaitTime)
     DoScreenFadeIn(1000)
 end
 
