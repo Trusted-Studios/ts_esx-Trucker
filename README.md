@@ -1,4 +1,5 @@
-![image](https://media.discordapp.net/attachments/985134187600297986/1154892454550585374/trusted-banner.png?width=1440&height=465)
+![trusted-banner](https://github.com/Trusted-Studios/ts_esx-Trucker/assets/79488475/8fb39181-6010-404f-b27e-e8e2329e1c2e)
+
 <p align="center">
     <a href="https://discord.gg/hmmM89nCdX">
         <img src="https://img.shields.io/discord/1068573047172374634?style=for-the-badge&logo=discord&labelColor=7289da&logoColor=white&color=2c2f33&label=Discord"/>
@@ -9,7 +10,8 @@
 
 # FiveM Basic Trucker Script
 
-![image](https://media.discordapp.net/attachments/1115375577159958558/1115375577424216195/Screenshot_897_-_Kopie.png?width=1246&height=701)
+![Screenshot_897_-_Kopie](https://github.com/Trusted-Studios/ts_esx-Trucker/assets/79488475/3a35ab3c-2595-4a5c-8071-2c6c18dc6a18)
+
 
 ## Informationen:
 
