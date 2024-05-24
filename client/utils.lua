@@ -77,7 +77,7 @@ function spawnCar(car)
     local x, y, z = table.unpack(GetEntityCoords(PlayerPedId(), false))
     local vehicle = CreateVehicle(car, x, y, z, GetEntityHeading(PlayerPedId()), true, false)
     SetPedIntoVehicle(PlayerPedId(), vehicle, -1)
-    SetEntityAsNoLongerNeeded(vehicle)
+    SetEntityAsMissionEntity(vehicle, true, false)
     SetModelAsNoLongerNeeded(vehicleName)
 end
 
@@ -90,7 +90,7 @@ function SpawnTrailer(car, x, y, z, h)
         Wait(50)
     end
     local vehicle = CreateVehicle(car, x, y, z, h, true, false)
-    SetEntityAsNoLongerNeeded(vehicle)
+    SetEntityAsMissionEntity(vehicle, true, false)
     SetModelAsNoLongerNeeded(vehicleName)
 end
 
