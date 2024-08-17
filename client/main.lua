@@ -177,7 +177,6 @@ function Info:DriveToCoords(x, y, z, event, newBlip, info)
         end
         break
     end
-    print("[no]", JobStarted, driveToCoords, driveToDeopt)
 end
 
 function Info:FinishJob(info, reward, x, y, z)
