@@ -94,11 +94,6 @@ function SpawnTrailer(car, x, y, z, h)
     SetModelAsNoLongerNeeded(vehicleName)
 end
 
--- Fahrzeug Löschen
-function deleteCar(entity)
-    InvokeNative( 0xEA386986E786A54F, PointerValueIntInitialized(entity))
-end
-
 -- Blackscreen triggern
 function ScreenFade(WaitTime)
     DoScreenFadeOut(1000)
@@ -113,10 +108,10 @@ end
 
 -- Debu Logs
 function Console_Log(str)
-    if Config.Debug then 
+    if Config.Debug then
         print(str)
-    end 
-end 
+    end
+end
 
 -- Checkt ob eine Index in der Tabelle ist
 function has_value(tab, val)
@@ -130,7 +125,7 @@ end
 
 function addMarker(x, y, z)
     DrawMarker(1, x, y, z - 1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.5, 0, 191, 255, 100, false, true, 2, false, nil, nil, false)
-end 
+end
 
 function RenderRect(x, y, w, h, r, g, b, a)
     local x, y, w, h = (tonumber(x) or 0) / 1920, (tonumber(y) or 0) / 1080, (tonumber(w) or 0) / 1920, (tonumber(h) or 0) / 1080
@@ -180,4 +175,4 @@ function DisablePlayerControls()
     DisableControlAction(0, 20, true) -- Z
     DisableControlAction(0, 137, true) -- CAPSLOCK
     DisableControlAction(0, 243, true) -- `/ ^
-end 
+end

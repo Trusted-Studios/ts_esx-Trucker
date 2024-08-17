@@ -1,7 +1,14 @@
+-- ════════════════════════════════════════════════════════════════════════════════════ --
+-- Trusted Development || FX-Manifest
+-- ════════════════════════════════════════════════════════════════════════════════════ --
 fx_version 'cerulean'
-games { 'gta5' };
-
 lua54 'yes'
+games { 'gta5' }
+
+author 'Trusted-Development | Simple and old Trucker Job'
+description 'Simple and old Trucker Job made by GMW'
+repository 'https://trusted.tebex.io'
+version '2.1.2'
 
 client_scripts {
     "src/RMenu.lua",
@@ -21,7 +28,7 @@ client_scripts {
 }
 
 server_scripts {
-    'config.lua', 
+    'config.lua',
     'server/*.lua',
 }
 

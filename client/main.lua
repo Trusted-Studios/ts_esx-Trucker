@@ -142,7 +142,6 @@ function Info:ShowProgressbar(time)
 end
 
 function Info:DisplayBlip(newBlip, msg, sprite, colour, route)
-    local currentBlip = newBlip
     SetBlipSprite(newBlip, sprite)
     SetBlipDisplay(newBlip, 6)
     SetBlipScale(newBlip, 1.0)
@@ -160,7 +159,7 @@ end
 function Info:DriveToCoords(x, y, z, event, newBlip, info)
     while JobStarted do
         Wait(0)
-        while driveToCoords or driveToDeopt == true do
+        while driveToCoords or driveToDeopt do
             Wait(0)
             if isTrailerAttached then
                 if Info:GetDistance(x, y, z, 20) then
@@ -178,6 +177,7 @@ function Info:DriveToCoords(x, y, z, event, newBlip, info)
         end
         break
     end
+    print("[no]", JobStarted, driveToCoords, driveToDeopt)
 end
 
 function Info:FinishJob(info, reward, x, y, z)
@@ -187,11 +187,10 @@ function Info:FinishJob(info, reward, x, y, z)
         DoScreenFadeOut(1000)
         Wait(1200)
         if (DoesEntityExist(ped) and not IsEntityDead(ped)) then
-            local pos = GetEntityCoords(ped)
             if (GetPedInVehicleSeat(veh, -1) == ped) then
                 SetEntityAsMissionEntity(veh, true, true)
                 TriggerServerEvent("GMW_Scripts:GiveTruckerMoney", info, reward)
-                deleteCar(veh)
+                DeleteVehicle(veh)
                 SetEntityCoords(ped, x, y, z)
                 JobStarted = false
             end
@@ -205,7 +204,7 @@ function Info:FinishJob(info, reward, x, y, z)
         if (DoesEntityExist(ped) and not IsEntityDead(ped)) then
             if (GetPedInVehicleSeat(veh, -1) == ped) then
                 SetEntityAsMissionEntity(veh, true, true)
-                deleteCar(veh)
+                DeleteVehicle(veh)
                 SetEntityCoords(ped, x, y, z)
                 JobStarted = false
             end
@@ -236,6 +235,7 @@ AddEventHandler("GMW_Scripts:TJ_StartJob", function(info)
     end)
     TriggerEvent("GMW_Scripts:isTrailerAttached", info)
     Wait(2000)
+    driveToCoords = true
     DoScreenFadeIn(1000)
     TriggerEvent("GMW_Scripts:ShowHUDComponents", info)
     TriggerEvent("GMW_Scripts:DrawRoute", info)
